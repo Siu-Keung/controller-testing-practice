@@ -137,4 +137,22 @@ public class CompanyControllerTest {
                 .andExpect(content().string("failed"));
     }
 
+    @Test
+    public void should_return_succeeded_when_modify_successfully() throws Exception {
+        when(this.companyService.updateCompany(any()))
+                .thenReturn(true);
+
+        mockMvc.perform(put("/companies/2").content(anyString()))
+                .andExpect(content().string("succeeded"));
+    }
+
+    @Test
+    public void should_return_failed_when_modify_not_successfully() throws Exception {
+        when(this.companyService.updateCompany(any()))
+                .thenReturn(false);
+
+        mockMvc.perform(put("/companies/2").content(anyString()))
+                .andExpect(content().string("failed"));
+    }
+
 }
