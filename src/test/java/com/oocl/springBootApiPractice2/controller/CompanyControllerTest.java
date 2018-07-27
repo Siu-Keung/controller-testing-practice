@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -111,5 +113,28 @@ public class CompanyControllerTest {
                 .andExpect(content().string(mapper.writeValueAsString(expectedList2)));
     }
 
+    @Test
+    public void should_add_company_successfully_when_given_id_not_exists() throws Exception {
+
+        when(this.companyService.addCompany(any()))
+                .thenReturn(true);
+
+        mockMvc.perform(post("/companies")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(anyString()))
+                .andExpect(content().string("succeeded"));
+    }
+
+    @Test
+    public void should_add_company_failed_when_given_id_already_exists() throws Exception {
+
+        when(this.companyService.addCompany(any()))
+                .thenReturn(false);
+
+        mockMvc.perform(post("/companies")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(anyString()))
+                .andExpect(content().string("failed"));
+    }
 
 }
