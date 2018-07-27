@@ -7,7 +7,6 @@ import com.oocl.springBootApiPractice2.model.CompanyModel;
 import com.oocl.springBootApiPractice2.service.CompanyService;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -15,15 +14,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -44,7 +38,7 @@ public class CompanyControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private List<CompanyModel> companies;
+    private List<CompanyModel> companyModels;
     private List<Employee> employeeList;
     private ObjectMapper mapper;
 
@@ -52,9 +46,9 @@ public class CompanyControllerTest {
     public void setup() {
         this.mapper = new ObjectMapper();
 
-        this.companies = new ArrayList();
-        this.companies.add(new CompanyModel(new Company(1, "公司1")));
-        this.companies.add(new CompanyModel(new Company(2, "公司2")));
+        this.companyModels = new ArrayList();
+        this.companyModels.add(new CompanyModel(new Company(1, "公司1")));
+        this.companyModels.add(new CompanyModel(new Company(2, "公司2")));
 
         this.employeeList = new ArrayList<>();
         this.employeeList.add(new Employee(1, "小红", 19, "女", 5000.0, 1));
@@ -64,22 +58,22 @@ public class CompanyControllerTest {
 
     @Test
     public void should_get_all_companies() throws Exception {
-        when(companyService.getAllCompaniesModels()).thenReturn(this.companies);
+        when(companyService.getAllCompaniesModels()).thenReturn(this.companyModels);
 
         mockMvc.perform(get("/companies"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(content().string(mapper.writeValueAsString(this.companies)));
+                .andExpect(content().string(mapper.writeValueAsString(this.companyModels)));
     }
 
     @Test
     public void should_get_the_specific_company() throws Exception {
-        when(companyService.getCompanyModelById(1)).thenReturn(this.companies.get(0));
+        when(companyService.getCompanyModelById(1)).thenReturn(this.companyModels.get(0));
 
         mockMvc.perform(get("/companies/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(content().string(mapper.writeValueAsString(this.companies.get(0))));
+                .andExpect(content().string(mapper.writeValueAsString(this.companyModels.get(0))));
     }
 
     @Test
@@ -94,6 +88,27 @@ public class CompanyControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(content().string(mapper.writeValueAsString(this.employeeList)))
                 .andDo(print());
+    }
+
+    @Test
+    public void should_return_companies_paging() throws Exception {
+        List<CompanyModel> expectedList1 = this.companyModels.subList(1, 2);
+        List<CompanyModel> expectedList2 = this.companyModels;
+
+        when(this.companyService.getCompaniesModelsPaging(2, 1))
+                .thenReturn(this.companyModels.subList(1, 2));
+        when(this.companyService.getCompaniesModelsPaging(1, 2))
+                .thenReturn(this.companyModels);
+
+        mockMvc.perform(get("/companies/page/2/pageSize/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().string(this.mapper.writeValueAsString(expectedList1)));
+
+        mockMvc.perform(get("/companies/page/1/pageSize/2"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().string(mapper.writeValueAsString(expectedList2)));
     }
 
 
