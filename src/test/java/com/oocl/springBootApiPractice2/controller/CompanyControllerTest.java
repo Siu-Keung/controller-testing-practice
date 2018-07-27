@@ -155,4 +155,21 @@ public class CompanyControllerTest {
                 .andExpect(content().string("failed"));
     }
 
+    @Test
+    public void should_remove_company_successfully() throws Exception {
+        when(this.companyService.removeCompanyAndEmployees(any()))
+                .thenReturn(true);
+
+        mockMvc.perform(delete("/companies/1").content(anyString()))
+                .andExpect(content().string("succeeded"));
+    }
+
+    @Test
+    public void should_remove_company_failed() throws Exception {
+        when(this.companyService.removeCompanyAndEmployees(any()))
+                .thenReturn(false);
+        mockMvc.perform(delete("/companies/1").content(anyString()))
+                .andExpect(content().string("failed"));
+    }
+
 }
