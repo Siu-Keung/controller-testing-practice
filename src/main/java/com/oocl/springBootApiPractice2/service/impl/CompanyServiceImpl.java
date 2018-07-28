@@ -72,14 +72,13 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public boolean updateCompany(Company newCompany) throws ResourceNotFoundException {
+    public void updateCompany(Company newCompany) throws ResourceNotFoundException {
         Optional<Company> optional = this.allCompanies.stream()
                 .filter(item -> item.equals(newCompany)).findFirst();
         if (!optional.isPresent())
             throw new ResourceNotFoundException();
         Company targetCompany = optional.get();
         targetCompany.setCompanyName(newCompany.getCompanyName());
-        return true;
     }
 
     @Override

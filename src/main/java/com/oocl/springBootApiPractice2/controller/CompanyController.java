@@ -59,5 +59,4 @@ public class CompanyController {
         this.companyService.removeCompanyAndEmployees(id);
     }
 
-
 }

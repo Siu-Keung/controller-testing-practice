@@ -21,7 +21,7 @@ public interface CompanyService {
 
     void addCompany(Company newCompany) throws DuplicateResourceIDException;
 
-    boolean updateCompany(Company newCompany) throws ResourceNotFoundException;
+    void updateCompany(Company newCompany) throws ResourceNotFoundException;
 
     void removeCompanyAndEmployees(Integer companyId) throws ResourceNotFoundException;
 }

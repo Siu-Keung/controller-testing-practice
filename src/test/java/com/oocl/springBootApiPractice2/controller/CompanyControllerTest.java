@@ -163,9 +163,6 @@ public class CompanyControllerTest {
 
     @Test
     public void should_return_succeeded_when_modify_successfully() throws Exception {
-        when(this.companyService.updateCompany(any()))
-                .thenReturn(true);
-
         mockMvc.perform(put("/companies/2").content(anyString()))
                 .andExpect(status().is(HttpStatus.NO_CONTENT.value()))
                 .andExpect(content().string(""));
@@ -176,8 +173,7 @@ public class CompanyControllerTest {
         ResourceNotFoundException exception =
                 new ResourceNotFoundException();
 
-        when(this.companyService.updateCompany(any()))
-                .thenThrow(exception);
+        doThrow(exception).when(this.companyService).updateCompany(any());
 
         mockMvc.perform(put("/companies/2").content(anyString()))
                 .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
