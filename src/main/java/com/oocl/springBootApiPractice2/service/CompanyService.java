@@ -1,6 +1,7 @@
 package com.oocl.springBootApiPractice2.service;
 
 import com.oocl.springBootApiPractice2.entity.Company;
+import com.oocl.springBootApiPractice2.exception.exceptionModel.DuplicateResourceIDException;
 import com.oocl.springBootApiPractice2.exception.exceptionModel.ResourceNotFoundException;
 import com.oocl.springBootApiPractice2.model.CompanyModel;
 
@@ -16,11 +17,11 @@ public interface CompanyService {
 
     CompanyModel getCompanyModelById(Integer id);
 
-    List<CompanyModel> getCompaniesModelsPaging(int pageNum, int size);
+    List<CompanyModel> getCompaniesModelsPaging(int pageNum, int size) throws IndexOutOfBoundsException;
 
-    Boolean addCompany(Company newCompany);
+    void addCompany(Company newCompany) throws DuplicateResourceIDException;
 
     boolean updateCompany(Company newCompany) throws ResourceNotFoundException;
 
-    Boolean removeCompanyAndEmployees(Integer companyId);
+    void removeCompanyAndEmployees(Integer companyId) throws ResourceNotFoundException;
 }

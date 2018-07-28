@@ -61,18 +61,16 @@ public class CompanyServiceImplTest {
 
     @Test
     public void should_add_company_successfully_when_given_id_not_exists(){
-        boolean result = this.companyService.addCompany(new Company(3, "公司3"));
+        this.companyService.addCompany(new Company(3, "公司3"));
 
         assertThat(this.companyList.size(), is(3));
-        assertThat(result, is(true));
     }
 
     @Test
     public void should_add_company_failed_when_given_id_exists(){
-        boolean result = this.companyService.addCompany(new Company(2, "公司2"));
+        this.companyService.addCompany(new Company(2, "公司2"));
 
         assertThat(this.companyList.size(), is(2));
-        assertThat(result, is(false));
     }
 
     @Test
@@ -96,9 +94,8 @@ public class CompanyServiceImplTest {
 
     @Test
     public void should_remove_company_and_employees(){
-        boolean succeeded = this.companyService.removeCompanyAndEmployees(1);
+        this.companyService.removeCompanyAndEmployees(1);
 
-        assertThat(succeeded, is(true));
         assertThat(this.employeesList.size(), is(1));
         assertThat(this.companyList.size(), is(1));
     }

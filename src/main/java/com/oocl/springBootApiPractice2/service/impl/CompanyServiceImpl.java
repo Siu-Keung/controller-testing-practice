@@ -2,6 +2,7 @@ package com.oocl.springBootApiPractice2.service.impl;
 
 import com.oocl.springBootApiPractice2.entity.Company;
 import com.oocl.springBootApiPractice2.entity.Employee;
+import com.oocl.springBootApiPractice2.exception.exceptionModel.DuplicateResourceIDException;
 import com.oocl.springBootApiPractice2.exception.exceptionModel.ResourceNotFoundException;
 import com.oocl.springBootApiPractice2.model.CompanyModel;
 import com.oocl.springBootApiPractice2.service.CompanyService;
@@ -57,18 +58,17 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<CompanyModel> getCompaniesModelsPaging(int pageNum, int size) {
+    public List<CompanyModel> getCompaniesModelsPaging(int pageNum, int size) throws IndexOutOfBoundsException {
         int startIndex = (pageNum - 1) * size;
         int endIndex = startIndex + size;
         return this.getAllCompaniesModels().subList(startIndex, endIndex);
     }
 
     @Override
-    public Boolean addCompany(Company newCompany) {
+    public void addCompany(Company newCompany) throws DuplicateResourceIDException {
         if (this.allCompanies.indexOf(newCompany) != -1)
-            return false;
+            throw new DuplicateResourceIDException();
         this.allCompanies.add(newCompany);
-        return true;
     }
 
     @Override
@@ -83,11 +83,11 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Boolean removeCompanyAndEmployees(Integer companyId) {
+    public void removeCompanyAndEmployees(Integer companyId) throws ResourceNotFoundException {
         Optional<Company> optional = this.allCompanies.stream()
                 .filter(item -> item.getId().equals(companyId)).findFirst();
         if (!optional.isPresent())
-            return false;
+            throw new ResourceNotFoundException();
         Company targetCompany = optional.get();
         Iterator<Employee> iterator = this.allEmployees.iterator();
         while (iterator.hasNext()) {
@@ -96,6 +96,5 @@ public class CompanyServiceImpl implements CompanyService {
                 iterator.remove();
         }
         this.allCompanies.remove(targetCompany);
-        return true;
     }
 }

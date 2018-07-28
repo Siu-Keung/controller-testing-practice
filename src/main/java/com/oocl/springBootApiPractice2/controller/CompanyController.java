@@ -36,14 +36,15 @@ public class CompanyController {
 
     @GetMapping("/companies/page/{pageNum}/pageSize/{pageSize}")
     public List<CompanyModel> getCompanyModelsPaging(
-            @PathVariable Integer pageNum, @PathVariable Integer pageSize
-    ){
+            @PathVariable Integer pageNum, @PathVariable Integer pageSize)
+    {
         return companyService.getCompaniesModelsPaging(pageNum, pageSize);
     }
 
     @PostMapping("/companies")
-    public String addCompany(Company company){
-        return this.companyService.addCompany(company) ? "succeeded" : "failed";
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addCompany(Company company){
+        this.companyService.addCompany(company);
     }
 
     @PutMapping("/companies/{id}")
@@ -53,8 +54,9 @@ public class CompanyController {
     }
 
     @DeleteMapping("/companies/{id}")
-    public String removeCompany(@PathVariable Integer id){
-        return this.companyService.removeCompanyAndEmployees(id) ? "succeeded" : "failed";
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeCompany(@PathVariable Integer id){
+        this.companyService.removeCompanyAndEmployees(id);
     }
 
 

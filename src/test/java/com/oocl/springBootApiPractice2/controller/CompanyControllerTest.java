@@ -3,10 +3,10 @@ package com.oocl.springBootApiPractice2.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oocl.springBootApiPractice2.entity.Company;
 import com.oocl.springBootApiPractice2.entity.Employee;
+import com.oocl.springBootApiPractice2.exception.exceptionModel.DuplicateResourceIDException;
 import com.oocl.springBootApiPractice2.exception.exceptionModel.ResourceNotFoundException;
 import com.oocl.springBootApiPractice2.model.CompanyModel;
 import com.oocl.springBootApiPractice2.service.CompanyService;
-import com.sun.deploy.net.HttpResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,13 +18,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -92,8 +92,7 @@ public class CompanyControllerTest {
 
         mockMvc.perform(get("/companies/" + anyInt()))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(exception.getMessage()))
-                .andDo(print());
+                .andExpect(content().string(exception.getMessage()));
     }
 
     @Test
@@ -106,8 +105,7 @@ public class CompanyControllerTest {
         mockMvc.perform(get("/companies/1/employees"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(content().string(mapper.writeValueAsString(this.employeeList)))
-                .andDo(print());
+                .andExpect(content().string(mapper.writeValueAsString(this.employeeList)));
     }
 
     @Test
@@ -131,28 +129,36 @@ public class CompanyControllerTest {
                 .andExpect(content().string(mapper.writeValueAsString(expectedList2)));
     }
 
+    public void should_return_404_when_page_index_out_of_range() throws Exception {
+        IndexOutOfBoundsException exception =
+                new IndexOutOfBoundsException();
+
+        when(this.companyService.getCompaniesModelsPaging(any(), any())).thenThrow(exception);
+
+        mockMvc.perform(get("/companies/page/1/pageSize/1"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(exception.getMessage()));
+    }
+
     @Test
     public void should_add_company_successfully_when_given_id_not_exists() throws Exception {
-
-        when(this.companyService.addCompany(any()))
-                .thenReturn(true);
-
         mockMvc.perform(post("/companies")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(anyString()))
-                .andExpect(content().string("succeeded"));
+                .andExpect(status().isCreated());
     }
 
     @Test
     public void should_add_company_failed_when_given_id_already_exists() throws Exception {
+        DuplicateResourceIDException exception =
+                new DuplicateResourceIDException();
 
-        when(this.companyService.addCompany(any()))
-                .thenReturn(false);
+        doThrow(exception).when(this.companyService).addCompany(any());
 
         mockMvc.perform(post("/companies")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(anyString()))
-                .andExpect(content().string("failed"));
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -180,19 +186,19 @@ public class CompanyControllerTest {
 
     @Test
     public void should_remove_company_successfully() throws Exception {
-        when(this.companyService.removeCompanyAndEmployees(any()))
-                .thenReturn(true);
-
-        mockMvc.perform(delete("/companies/1").content(anyString()))
-                .andExpect(content().string("succeeded"));
+        mockMvc.perform(delete("/companies/99999"))
+                .andExpect(status().isNoContent());
     }
 
     @Test
     public void should_remove_company_failed() throws Exception {
-        when(this.companyService.removeCompanyAndEmployees(any()))
-                .thenReturn(false);
-        mockMvc.perform(delete("/companies/1").content(anyString()))
-                .andExpect(content().string("failed"));
+        ResourceNotFoundException exception =
+                new ResourceNotFoundException();
+
+        doThrow(exception).when(this.companyService).removeCompanyAndEmployees(anyInt());
+
+        mockMvc.perform(delete("/companies/9999"))
+                .andExpect(status().isNotFound());
     }
 
 }
