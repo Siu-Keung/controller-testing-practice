@@ -140,6 +140,12 @@ public class EmployeeControllerTest {
                 .andExpect(content().string(exception.getMessage()));
     }
 
+    @Test
+    public void should_add_employee_succeessfully_and_return_201() throws Exception {
+        mockMvc.perform(post("/employees"))
+                .andExpect(status().isCreated());
+    }
+
 
 
 
