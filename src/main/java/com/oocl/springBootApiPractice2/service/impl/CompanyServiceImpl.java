@@ -2,11 +2,13 @@ package com.oocl.springBootApiPractice2.service.impl;
 
 import com.oocl.springBootApiPractice2.entity.Company;
 import com.oocl.springBootApiPractice2.entity.Employee;
+import com.oocl.springBootApiPractice2.exception.exceptionModel.ResourceNotFoundException;
 import com.oocl.springBootApiPractice2.model.CompanyModel;
 import com.oocl.springBootApiPractice2.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,7 +25,7 @@ public class CompanyServiceImpl implements CompanyService {
     private List<Employee> allEmployees;
 
     @Autowired
-    public CompanyServiceImpl(List<Company> allCompanies, List<Employee> allEmployees){
+    public CompanyServiceImpl(List<Company> allCompanies, List<Employee> allEmployees) {
         this.allCompanies = allCompanies;
         this.allEmployees = allEmployees;
     }
@@ -31,14 +33,14 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public List<CompanyModel> getAllCompaniesModels() {
         List<CompanyModel> resultList = new ArrayList<>();
-        for(Company company : this.allCompanies){
+        for (Company company : this.allCompanies) {
             List<Employee> employeeList = this.findEmployeesByCompanyId(company.getId());
             resultList.add(new CompanyModel(company, employeeList));
         }
         return resultList;
     }
 
-    private List<Employee> findEmployeesByCompanyId(Integer companyId){
+    private List<Employee> findEmployeesByCompanyId(Integer companyId) {
         return this.allEmployees.stream()
                 .filter(item -> item.getCompanyId().equals(companyId))
                 .collect(Collectors.toList());
@@ -49,8 +51,8 @@ public class CompanyServiceImpl implements CompanyService {
         Optional<Company> optional = this.allCompanies.stream()
                 .filter(item -> item.getId().equals(id))
                 .findFirst();
-        if(!optional.isPresent())
-            return null;
+        if (!optional.isPresent())
+            throw new ResourceNotFoundException();
         CompanyModel companyModel = new CompanyModel(optional.get(), findEmployeesByCompanyId(id));
         return companyModel;
     }
@@ -64,7 +66,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public Boolean addCompany(Company newCompany) {
-        if(this.allCompanies.indexOf(newCompany) != -1)
+        if (this.allCompanies.indexOf(newCompany) != -1)
             return false;
         this.allCompanies.add(newCompany);
         return true;
@@ -72,9 +74,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public Boolean updateCompany(Company newCompany) {
-        Optional<Company> optional =  this.allCompanies.stream()
+        Optional<Company> optional = this.allCompanies.stream()
                 .filter(item -> item.equals(newCompany)).findFirst();
-        if(!optional.isPresent())
+        if (!optional.isPresent())
             return false;
         Company targetCompany = optional.get();
         targetCompany.setCompanyName(newCompany.getCompanyName());
@@ -85,13 +87,13 @@ public class CompanyServiceImpl implements CompanyService {
     public Boolean removeCompanyAndEmployees(Integer companyId) {
         Optional<Company> optional = this.allCompanies.stream()
                 .filter(item -> item.getId().equals(companyId)).findFirst();
-        if(!optional.isPresent())
+        if (!optional.isPresent())
             return false;
         Company targetCompany = optional.get();
         Iterator<Employee> iterator = this.allEmployees.iterator();
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             Employee employee = iterator.next();
-            if(employee.getCompanyId().equals(targetCompany.getId()))
+            if (employee.getCompanyId().equals(targetCompany.getId()))
                 iterator.remove();
         }
         this.allCompanies.remove(targetCompany);

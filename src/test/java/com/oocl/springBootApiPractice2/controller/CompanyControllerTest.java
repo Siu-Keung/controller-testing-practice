@@ -3,6 +3,7 @@ package com.oocl.springBootApiPractice2.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oocl.springBootApiPractice2.entity.Company;
 import com.oocl.springBootApiPractice2.entity.Employee;
+import com.oocl.springBootApiPractice2.exception.exceptionModel.ResourceNotFoundException;
 import com.oocl.springBootApiPractice2.model.CompanyModel;
 import com.oocl.springBootApiPractice2.service.CompanyService;
 import org.junit.Before;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -76,6 +78,19 @@ public class CompanyControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(content().string(mapper.writeValueAsString(this.companyModels.get(0))));
+    }
+
+    @Test
+    public void should_get_404_when_given_invalid_company_id() throws Exception {
+        ResourceNotFoundException exception =
+                new ResourceNotFoundException();
+
+        when(companyService.getCompanyModelById(any())).thenThrow(exception);
+
+        mockMvc.perform(get("/companies/" + anyInt()))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(exception.getMessage()))
+                .andDo(print());
     }
 
     @Test
