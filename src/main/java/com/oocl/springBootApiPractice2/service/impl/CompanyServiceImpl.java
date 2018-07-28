@@ -7,7 +7,6 @@ import com.oocl.springBootApiPractice2.model.CompanyModel;
 import com.oocl.springBootApiPractice2.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -73,11 +72,11 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Boolean updateCompany(Company newCompany) {
+    public boolean updateCompany(Company newCompany) throws ResourceNotFoundException {
         Optional<Company> optional = this.allCompanies.stream()
                 .filter(item -> item.equals(newCompany)).findFirst();
         if (!optional.isPresent())
-            return false;
+            throw new ResourceNotFoundException();
         Company targetCompany = optional.get();
         targetCompany.setCompanyName(newCompany.getCompanyName());
         return true;

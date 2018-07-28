@@ -5,8 +5,8 @@ import com.oocl.springBootApiPractice2.entity.Employee;
 import com.oocl.springBootApiPractice2.model.CompanyModel;
 import com.oocl.springBootApiPractice2.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.yaml.snakeyaml.events.Event;
 
 import java.util.List;
 
@@ -47,8 +47,9 @@ public class CompanyController {
     }
 
     @PutMapping("/companies/{id}")
-    public String updateCompany(Company company){
-        return this.companyService.updateCompany(company) ? "succeeded" : "failed";
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateCompany(Company company){
+        this.companyService.updateCompany(company);
     }
 
     @DeleteMapping("/companies/{id}")

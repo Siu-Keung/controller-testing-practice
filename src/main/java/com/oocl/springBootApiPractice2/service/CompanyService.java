@@ -1,6 +1,7 @@
 package com.oocl.springBootApiPractice2.service;
 
 import com.oocl.springBootApiPractice2.entity.Company;
+import com.oocl.springBootApiPractice2.exception.exceptionModel.ResourceNotFoundException;
 import com.oocl.springBootApiPractice2.model.CompanyModel;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface CompanyService {
 
     Boolean addCompany(Company newCompany);
 
-    Boolean updateCompany(Company newCompany);
+    boolean updateCompany(Company newCompany) throws ResourceNotFoundException;
 
     Boolean removeCompanyAndEmployees(Integer companyId);
 }

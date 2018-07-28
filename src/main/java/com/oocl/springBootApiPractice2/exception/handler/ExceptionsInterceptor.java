@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ControllerAdvice
 @ResponseBody
-public class ExceptionInterceptor {
+public class ExceptionsInterceptor {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler

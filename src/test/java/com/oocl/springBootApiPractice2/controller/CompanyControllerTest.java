@@ -6,16 +6,19 @@ import com.oocl.springBootApiPractice2.entity.Employee;
 import com.oocl.springBootApiPractice2.exception.exceptionModel.ResourceNotFoundException;
 import com.oocl.springBootApiPractice2.model.CompanyModel;
 import com.oocl.springBootApiPractice2.service.CompanyService;
+import com.sun.deploy.net.HttpResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -158,16 +161,21 @@ public class CompanyControllerTest {
                 .thenReturn(true);
 
         mockMvc.perform(put("/companies/2").content(anyString()))
-                .andExpect(content().string("succeeded"));
+                .andExpect(status().is(HttpStatus.NO_CONTENT.value()))
+                .andExpect(content().string(""));
     }
 
     @Test
     public void should_return_failed_when_modify_not_successfully() throws Exception {
+        ResourceNotFoundException exception =
+                new ResourceNotFoundException();
+
         when(this.companyService.updateCompany(any()))
-                .thenReturn(false);
+                .thenThrow(exception);
 
         mockMvc.perform(put("/companies/2").content(anyString()))
-                .andExpect(content().string("failed"));
+                .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
+                .andExpect(content().string(exception.getMessage()));
     }
 
     @Test
