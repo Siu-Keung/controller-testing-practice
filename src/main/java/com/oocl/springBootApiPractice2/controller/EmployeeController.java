@@ -1,6 +1,8 @@
 package com.oocl.springBootApiPractice2.controller;
 
 import com.oocl.springBootApiPractice2.entity.Employee;
+import com.oocl.springBootApiPractice2.exception.exceptionModel.IllegalCommandException;
+import com.oocl.springBootApiPractice2.exception.exceptionModel.ResourceNotFoundException;
 import com.oocl.springBootApiPractice2.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,8 @@ public class EmployeeController {
         try {
             return this.employeeService.getEmployeeById(Integer.valueOf(param));
         }catch (NumberFormatException e){
+            if(!param.equals("男") && !param.equals("女"))
+                throw new IllegalCommandException();
             return this.employeeService.getEmployeesByGender(param);
         }
     }

@@ -1,10 +1,11 @@
 package com.oocl.springBootApiPractice2.service.impl;
 
 import com.oocl.springBootApiPractice2.entity.Employee;
+import com.oocl.springBootApiPractice2.exception.exceptionModel.ResourceNotFoundException;
 import com.oocl.springBootApiPractice2.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,12 +29,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee getEmployeeById(Integer id) {
+    public Employee getEmployeeById(Integer id) throws ResourceNotFoundException {
         Optional<Employee> optional = this.allEmployees.stream().filter(item -> item.getId().equals(id)).findFirst();
         if(optional.isPresent())
             return optional.get();
         else
-            return null;
+            throw new ResourceNotFoundException();
     }
 
     @Override

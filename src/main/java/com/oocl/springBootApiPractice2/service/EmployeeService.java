@@ -1,6 +1,7 @@
 package com.oocl.springBootApiPractice2.service;
 
 import com.oocl.springBootApiPractice2.entity.Employee;
+import com.oocl.springBootApiPractice2.exception.exceptionModel.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface EmployeeService {
 
     List<Employee> getAllEmployees();
 
-    Employee getEmployeeById(Integer id);
+    Employee getEmployeeById(Integer id) throws ResourceNotFoundException;
 
     Boolean addEmployee(Employee employee);
 

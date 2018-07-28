@@ -1,6 +1,7 @@
 package com.oocl.springBootApiPractice2.exception.handler;
 
 import com.oocl.springBootApiPractice2.exception.exceptionModel.DuplicateResourceIDException;
+import com.oocl.springBootApiPractice2.exception.exceptionModel.IllegalCommandException;
 import com.oocl.springBootApiPractice2.exception.exceptionModel.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -31,6 +32,12 @@ public class ExceptionsHandler {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler
     public String handleDuplicateIdException(DuplicateResourceIDException e){
+        return e.getMessage();
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public String handleIllegalCommandException(IllegalCommandException e){
         return e.getMessage();
     }
 
