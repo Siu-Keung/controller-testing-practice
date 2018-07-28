@@ -1,6 +1,7 @@
 package com.oocl.springBootApiPractice2.service;
 
 import com.oocl.springBootApiPractice2.entity.Employee;
+import com.oocl.springBootApiPractice2.exception.exceptionModel.DuplicateResourceIDException;
 import com.oocl.springBootApiPractice2.exception.exceptionModel.ResourceNotFoundException;
 
 import java.util.List;
@@ -15,11 +16,11 @@ public interface EmployeeService {
 
     Employee getEmployeeById(Integer id) throws ResourceNotFoundException;
 
-    Boolean addEmployee(Employee employee);
+    void addEmployee(Employee employee) throws DuplicateResourceIDException;
 
-    Boolean updateEmployee(Employee employee);
+    void updateEmployee(Employee employee) throws ResourceNotFoundException;
 
-    Boolean removeEmployee(Integer id);
+    void removeEmployee(Integer id) throws ResourceNotFoundException;
 
     List<Employee> getEmployeePaging(int pageNum, int size);
 

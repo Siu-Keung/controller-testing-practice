@@ -2,9 +2,9 @@ package com.oocl.springBootApiPractice2.controller;
 
 import com.oocl.springBootApiPractice2.entity.Employee;
 import com.oocl.springBootApiPractice2.exception.exceptionModel.IllegalCommandException;
-import com.oocl.springBootApiPractice2.exception.exceptionModel.ResourceNotFoundException;
 import com.oocl.springBootApiPractice2.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,26 +43,20 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees")
-    public String addEmployee(Employee newEmployee){
-        if(this.employeeService.addEmployee(newEmployee))
-            return "succeeded";
-        else
-            return "failed";
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addEmployee(Employee newEmployee){
+        this.employeeService.addEmployee(newEmployee);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/employees/{employeeId}")
-    public String updateEmployee(Employee newEmployee){
-        if(this.employeeService.updateEmployee(newEmployee))
-            return "succeeded";
-        else
-            return "failed";
+    public void updateEmployee(Employee newEmployee){
+        this.employeeService.updateEmployee(newEmployee);
     }
 
     @DeleteMapping("/employees/{employeeId}")
-    public String deleteEmployee(@PathVariable Integer employeeId){
-        if(this.employeeService.removeEmployee(employeeId))
-            return "succeeded";
-        else
-            return "failed";
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEmployee(@PathVariable Integer employeeId){
+        this.employeeService.removeEmployee(employeeId);
     }
 }

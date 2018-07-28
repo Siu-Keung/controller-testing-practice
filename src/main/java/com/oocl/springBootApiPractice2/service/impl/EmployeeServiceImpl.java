@@ -1,6 +1,7 @@
 package com.oocl.springBootApiPractice2.service.impl;
 
 import com.oocl.springBootApiPractice2.entity.Employee;
+import com.oocl.springBootApiPractice2.exception.exceptionModel.DuplicateResourceIDException;
 import com.oocl.springBootApiPractice2.exception.exceptionModel.ResourceNotFoundException;
 import com.oocl.springBootApiPractice2.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,28 +39,29 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Boolean addEmployee(Employee employee) {
+    public void addEmployee(Employee employee) throws DuplicateResourceIDException {
         if(this.allEmployees.indexOf(employee) != -1)
-            return false;
+            throw new DuplicateResourceIDException();
         this.allEmployees.add(employee);
-        return true;
     }
 
     @Override
-    public Boolean updateEmployee(Employee employee) {
+    public void updateEmployee(Employee employee) throws ResourceNotFoundException {
         int index = this.allEmployees.indexOf(employee);
         if(-1 == index)
-            return false;
+            throw new ResourceNotFoundException();
         Employee targetEmployee = this.allEmployees.get(index);
         targetEmployee.setName(employee.getName());
         targetEmployee.setAge(employee.getAge());
         targetEmployee.setGender(employee.getGender());
-        return true;
     }
 
     @Override
-    public Boolean removeEmployee(Integer id) {
-        return this.allEmployees.remove(new Employee(id));
+    public void removeEmployee(Integer id) throws ResourceNotFoundException {
+        Employee employee = new Employee(id);
+        if(this.allEmployees.indexOf(employee) == -1)
+            throw new ResourceNotFoundException();
+        this.allEmployees.remove(employee);
     }
 
     @Override
