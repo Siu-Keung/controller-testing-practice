@@ -1,4 +1,4 @@
-package com.oocl.springBootApiPractice2.exception.exceptionModel;
+package com.oocl.springBootApiPractice2.exception;
 
 /**
  * @author Dylan Wei

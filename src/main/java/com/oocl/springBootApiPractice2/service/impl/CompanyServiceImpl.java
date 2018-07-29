@@ -2,8 +2,8 @@ package com.oocl.springBootApiPractice2.service.impl;
 
 import com.oocl.springBootApiPractice2.entity.Company;
 import com.oocl.springBootApiPractice2.entity.Employee;
-import com.oocl.springBootApiPractice2.exception.exceptionModel.DuplicateResourceIDException;
-import com.oocl.springBootApiPractice2.exception.exceptionModel.ResourceNotFoundException;
+import com.oocl.springBootApiPractice2.exception.DuplicateResourceIDException;
+import com.oocl.springBootApiPractice2.exception.ResourceNotFoundException;
 import com.oocl.springBootApiPractice2.model.CompanyModel;
 import com.oocl.springBootApiPractice2.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;

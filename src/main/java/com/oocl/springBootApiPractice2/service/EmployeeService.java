@@ -1,8 +1,8 @@
 package com.oocl.springBootApiPractice2.service;
 
 import com.oocl.springBootApiPractice2.entity.Employee;
-import com.oocl.springBootApiPractice2.exception.exceptionModel.DuplicateResourceIDException;
-import com.oocl.springBootApiPractice2.exception.exceptionModel.ResourceNotFoundException;
+import com.oocl.springBootApiPractice2.exception.DuplicateResourceIDException;
+import com.oocl.springBootApiPractice2.exception.ResourceNotFoundException;
 
 import java.util.List;
 

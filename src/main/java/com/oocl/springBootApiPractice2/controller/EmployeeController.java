@@ -1,7 +1,7 @@
 package com.oocl.springBootApiPractice2.controller;
 
 import com.oocl.springBootApiPractice2.entity.Employee;
-import com.oocl.springBootApiPractice2.exception.exceptionModel.IllegalCommandException;
+import com.oocl.springBootApiPractice2.exception.IllegalCommandException;
 import com.oocl.springBootApiPractice2.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

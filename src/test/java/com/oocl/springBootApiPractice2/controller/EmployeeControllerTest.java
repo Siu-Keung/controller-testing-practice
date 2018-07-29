@@ -2,11 +2,10 @@ package com.oocl.springBootApiPractice2.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oocl.springBootApiPractice2.entity.Employee;
-import com.oocl.springBootApiPractice2.exception.exceptionModel.DuplicateResourceIDException;
-import com.oocl.springBootApiPractice2.exception.exceptionModel.IllegalCommandException;
-import com.oocl.springBootApiPractice2.exception.exceptionModel.ResourceNotFoundException;
+import com.oocl.springBootApiPractice2.exception.DuplicateResourceIDException;
+import com.oocl.springBootApiPractice2.exception.IllegalCommandException;
+import com.oocl.springBootApiPractice2.exception.ResourceNotFoundException;
 import com.oocl.springBootApiPractice2.service.EmployeeService;
-import org.apache.tomcat.util.buf.Utf8Decoder;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
@@ -90,7 +88,7 @@ public class EmployeeControllerTest {
         when(this.employeeService.getEmployeesByGender(anyString()))
                 .thenReturn(employees);
 
-        // TODO: 2018-07-29 此处controller方法接收的参数会乱码导致测试不通过，待解决。 
+        // TODO: 2018-07-29 此处controller方法接收到的参数("男")会出现乱码，导致测试不通过，待解决。
         mockMvc.perform(get("/employees/男"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(mapper.writeValueAsString(employees)));

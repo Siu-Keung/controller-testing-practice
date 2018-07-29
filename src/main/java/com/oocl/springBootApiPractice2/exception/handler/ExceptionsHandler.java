@@ -1,8 +1,8 @@
 package com.oocl.springBootApiPractice2.exception.handler;
 
-import com.oocl.springBootApiPractice2.exception.exceptionModel.DuplicateResourceIDException;
-import com.oocl.springBootApiPractice2.exception.exceptionModel.IllegalCommandException;
-import com.oocl.springBootApiPractice2.exception.exceptionModel.ResourceNotFoundException;
+import com.oocl.springBootApiPractice2.exception.DuplicateResourceIDException;
+import com.oocl.springBootApiPractice2.exception.IllegalCommandException;
+import com.oocl.springBootApiPractice2.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
