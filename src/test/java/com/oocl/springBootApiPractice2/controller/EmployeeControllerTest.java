@@ -41,8 +41,6 @@ public class EmployeeControllerTest {
     private EmployeeService employeeService;
     @Autowired
     private MockMvc mockMvc;
-    @Rule
-    public ExpectedException expectedException;
 
     private ObjectMapper mapper = new ObjectMapper();
 
