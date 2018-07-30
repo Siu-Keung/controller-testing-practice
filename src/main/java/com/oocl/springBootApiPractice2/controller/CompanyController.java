@@ -16,8 +16,12 @@ import java.util.List;
  */
 @RestController
 public class CompanyController {
-    @Autowired
     private CompanyService companyService;
+
+    @Autowired
+    public CompanyController(CompanyService companyService){
+        this.companyService = companyService;
+    }
 
     @GetMapping("/companies")
     public List<CompanyModel> getCompanyModels(){

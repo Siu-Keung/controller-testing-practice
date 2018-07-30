@@ -86,10 +86,10 @@ public class EmployeeControllerTest {
         when(this.employeeService.getEmployeesByGender(anyString()))
                 .thenReturn(employees);
 
-        // TODO: 2018-07-29 此处controller方法接收到的参数("男")会出现乱码，导致测试不通过，待解决。
-        mockMvc.perform(get("/employees/男"))
+        mockMvc.perform(get("/employees/男").characterEncoding("UTF-8"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(mapper.writeValueAsString(employees)));
+
     }
 
     @Test

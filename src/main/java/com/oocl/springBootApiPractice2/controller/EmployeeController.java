@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -26,6 +27,7 @@ public class EmployeeController {
 
     @GetMapping("/employees/{param}")
     public Object getEmployeeById(@PathVariable String param){
+
         try {
             return this.employeeService.getEmployeeById(Integer.valueOf(param));
         }catch (NumberFormatException e){
